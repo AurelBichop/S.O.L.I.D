@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Reporting\Format\CsvFormatter;
+use App\Reporting\Format\HtmlFormatter;
+use App\Reporting\Format\HtmlSpecialFormatter;
+use App\Reporting\Format\JsonFormatter;
 use App\Reporting\Report;
 use App\Reporting\ReportExtractor;
 
@@ -23,6 +27,11 @@ class BulkReportController
         $report = new Report($date, $title, $data);
 
         $extractor = new ReportExtractor();
+        $extractor->addFormatter(new JsonFormatter);
+        $extractor->addFormatter(new CsvFormatter);
+        $extractor->addFormatter(new HtmlSpecialFormatter);
+        $extractor->addFormatter(new HtmlFormatter);
+
 
         $results = $extractor->process($report);
 

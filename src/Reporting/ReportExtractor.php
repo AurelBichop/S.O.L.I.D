@@ -2,8 +2,18 @@
 
 namespace App\Reporting;
 
+use App\Reporting\Format\FormatterInterface;
+
 class ReportExtractor
 {
+
+    protected $formatters = [];
+
+
+    public function addFormatter(FormatterInterface $formatter)
+    {
+        $this->formatters[] = $formatter;
+    }
 
     /**
      * Doit afficher l'ensemble des formats possibles pour un rapport en se servant
@@ -17,8 +27,9 @@ class ReportExtractor
     {
         $results = [];
 
-        $results[] = $report->formatToHTML();
-        $results[] = $report->formatToJSON();
+        foreach ($this->formatters as $formatter) {
+            $results[] = $formatter->format($report);
+        }
 
         return $results;
     }
